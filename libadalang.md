@@ -48,7 +48,7 @@ $ ./my_custom_lal_checker main.adb
 main.adb:2:9: Variable should start with lowercase letter
 main.adb:3:4: Type name should start with uppercase letter
 ```
-## Why not ASIS/GNAT?
+## Why not ASIS/GNAT?
 
 ### Challenges
 
@@ -118,10 +118,10 @@ print(double_call.f_name.p_referenced_decl)
 ```python
 diff = ctx.start_rewriting()
 
-# Get the first parameter of the call to Double
+# Get the first parameter of the call to Double
 param_diff = diff.get_node(double_call.f_suffix[0])
 
-# Replace the expression of the parameter with a new node
+# Replace the expression of the parameter with a new node
 param_diff.f_expr = lal.rewriting.RealLiteral('12.0')
 
 diff.apply()
@@ -129,8 +129,8 @@ diff.apply()
 
 ## An example
 
-Programme qui vérifie une propriété d'un noeud (par ex, les variables
-commencent par une majuscule)
+Program that checks some property on nodes (e.g. variables names must be
+capitalized).
 
 # Technical prototypes/demos
 
