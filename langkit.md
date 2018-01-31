@@ -134,6 +134,17 @@ class VariableDeclaration(RootNode):
 * Private ones: implementation detail, hidden from users
 * Functional programming language
 
+```python
+from langkit.expressions import langkit_property
+
+class VariableReference(FooNode):
+    name = Field()
+
+    @langkit_property(public=True)
+    def var_decl():
+        return Self.node_env.get_first(Self.name)
+```
+
 ## DSL Episode 5.5: Logic DSL
 
 TODO
