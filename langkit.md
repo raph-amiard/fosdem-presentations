@@ -155,10 +155,37 @@ class VariableReference(FooNode):
 
 ## Base library: Ada (W00T!)
 
-[mention C API here]
+### Requirements for the target language:
 
-## First citizen Python bindings
+- Fast
+- Low level enough
+- Memory management agnostic (no GC)
+- Easy to bind to C and other languages
+
+### Candidates
+
+- C, C++, Ada, Rust, ... 
+
+### Chosen one: Ada
+
+- Since the project is developed at AdaCore: no surprises :)
+
+## Bindings to other languages
+
+### Automatically generated C bindings
+
+So that it is very easy to generate bindings to any languages the users wants.
+
+### First class citizen Python bindings
+
+- Python is the de-facto scripting language of the Langkit ecosystem.
+- Everything possible in Ada is possible in Python
+
 ## Easy to generate bindings to new languages
+
+- No need for external bindings generators
+- Knowledge about data types, functions, memory management -> Langkit
+
 ## Easy to interface
 [explain ecore stuff]
 
