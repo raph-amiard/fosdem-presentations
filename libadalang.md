@@ -177,3 +177,6 @@ TODO: fill when Romain sends
     * Generation of serializers/deserializers
 
 ## Conclusion
+
+- Sources are on [GitHub](https://github.com/AdaCore/libadalang)
+- Come open issues and create pull requests!
