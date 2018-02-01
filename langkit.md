@@ -181,7 +181,7 @@ TODO
 
 ### Candidates
 
-- C, C++, Ada, Rust, ... 
+- C, C++, Ada, Rust, ...
 
 ### Chosen one: Ada
 
