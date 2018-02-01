@@ -284,20 +284,173 @@ So that it is very easy to generate bindings to any languages the users wants.
 - Python is the de-facto scripting language of the Langkit ecosystem.
 - Everything possible in Ada is possible in Python
 
+## Use multiple generated libraries from python !
+
+```python
+import libadalang as lal # Langkit generated lib for Ada
+import libpythonlang as lpl # Langkit generated lib for Python
+
+ada_ctx = lal.AnalysisContext()
+python_ctx = lpl.AnalysisContext()
+
+print ada_ctx.get_from_buffer("<buffer>", """
+procedure Main is
+begin
+   null;
+end Main;
+"""
+) # <CompilationUnit 2:1-5:10>
+print python_ctx.get_from_buffer("<buffer>", """
+def test(a, b):
+    return a + b
+"""
+) # <FileNode 1:1-4:1>
+
+```
+
 ## Easy to generate bindings to new languages
 
 - No need for external bindings generators
 - Knowledge about data types, functions, memory management -> Langkit
 
-## Easy to interface
-[explain ecore stuff]
+- Planned in the future:
+    * Java (certainly) for interaction with IDEs
+    * Lua (maybe)
+    * ... Whatever you need !
 
 ## Tree walking
+
+Source code:
+
+```python
+a = 12
+b = 15
+print a + b
+```
+
+
+Processing:
+```python
+>>> for assign in unit.root.findall(lpl.AssignStmt):
+>>>    print "Stmt: ", assign.text, assign.sloc 
+
+Stmt:  a = 12 2:1-2:7
+Stmt:  b = 15 3:1-3:7
+```
+
 ## Rewriting
 
+Source code:
+```ada
+procedure Main is
+begin
+    Put_Line ("Hello world");
+end Main;
+```
+
+Let's rewrite:
+```python
+call = unit.root.findall(lal.CallExpr) # Find the call
+diff = ctx.start_rewriting() # Start a rewriting
+param_diff = diff.get_node(call.f_suffix[0]) # Get the param of the call
+# Replace the expression of the parameter with a new node
+param_diff.f_expr = lal.rewriting.StringLiteral('"Bye world"')
+diff.apply()
+```
+
+Result:
+```ada
+procedure Main is
+begin
+    Put_Line ("Bye world");
+end Main;
+```
+
 # Generic tools shipping with the libraries
-## Playground
-## Vim plug-ins
+
+## Small tools
+
+### ./playground
+
+- Command line tool based on IPython
+- Allow interactive exploration of the tree/API in general
+
+### ./parse
+
+- Allows you to inspect the structure of the tree
+- Dump lexical environments
+
+## Unparser (along with tree rewriting)
+
+- Create a new source file *only from the tree* (not using original source
+  information)
+- Can also be used to create sources from completely synthetic trees
+- Uses the grammar and the AST definition (no additional code needed)
+
+## Code indenter (prototype)
+
+- Provide a declarative data structure for indentation rules
+
+```python
+block_rule = field_rules(constant_increment=3)
+paren_rule = field_rules(on_token="(")
+
+indent_map = {
+    lal.PackageDecl: Indent(
+        field_rules=indent_fields(
+            public_part=block_rule, private_part=block_rule
+        )
+    ),
+    ...
+    lal.Params: Indent(
+        field_rules=indent_fields(params=paren_rule)
+    ),
+}
+```
+
+- Get auto indentation on tab in your favorite editor
+
+## Syntax highlighter (not done)
+
+- Auto generation of syntax highlighter
+- Highlight keywords by default
+- Custom rules to highlight more complex syntax based rules
+- Automatic support in your editor
+
 ## Language server protocol? (not done)
 
-# Demo!
+- Tentative plan: Automatically generate basic LSP support from the plug-in
+- We have a Neovim plug-in already doing for Ada:
+    - Indentation
+    - Go to definition
+    - Tree editing and exploration
+- In the future: More editors, more languages ?
+
+## A multi-language static analyzer in 20 lines of Python
+
+```python
+ada_ops = (lal.OpMult, lal.OpPlus, lal.OpDoubleDot, lal.OpPow, lal.OpConcat)
+py_ops = (pyl.OpMult, pyl.OpPlus, pyl.OpDoubleDot, pyl.OpPow, pyl.OpConcat)
+
+def has_same_operands(binop):
+    def same_tokens(left, right):
+        return len(left) == len(right) and all(
+            le.is_equivalent(ri) for le, ri in zip(left, right)
+        )
+    return same_tokens(list(binop.f_left.tokens), list(binop.f_right.tokens))
+
+def interesting_oper(op):
+    return not op.is_a)
+
+for b in unit.root.findall(lal.BinOp):
+    if interesting_oper(b.f_op) and has_same_operands(b):
+        print 'Same operands for {} in {}'.format(b, source_file)
+```
+
+## Existing langkit-based libraries & prototypes
+
+- Ada
+- Python
+- JSON
+- GPR files (AdaCore's project description language)
+- KConfig
