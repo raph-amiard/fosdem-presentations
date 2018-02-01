@@ -129,8 +129,26 @@ diff.apply()
 
 ## An example
 
-Program that checks some property on nodes (e.g. variables names must be
-capitalized).
+```python
+import sys
+import libadalang as lal
+
+def check_ident(ident):
+    if ident.text[0] != ident.text[0].upper():
+        print('{}:{}: variable name "{}" should be capitalized'.format(
+            ident.unit.filename, ident.sloc_range.start, ident.text
+        ))
+
+ctx = lal.AnalysisContext()
+for filename in sys.argv[1:]:
+    u = ctx.get_from_file(filename)
+    for d in u.diagnostics:
+        print('{}:{}'.format(filename, d))
+    if u.root:
+        for decl in u.root.findall(lal.ObjectDecl):
+            for ident in decl.f_ids:
+                check_ident(ident)
+```
 
 # Technical prototypes/demos
 
