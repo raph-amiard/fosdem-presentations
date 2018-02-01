@@ -285,14 +285,14 @@ F1 (F2 (F2 ('C')));
 
 ### Automatically generated C bindings
 
-So that it is very easy to generate bindings to any languages the users wants.
+So that it is very easy to generate bindings to any languages the users wants
 
 ### First class citizen Python bindings
 
-- Python is the de-facto scripting language of the Langkit ecosystem.
+- Python is the de-facto scripting language of the Langkit ecosystem
 - Everything possible in Ada is possible in Python
 
-## Use multiple generated libraries from python !
+## Use multiple generated libraries from Python!
 
 ```python
 import libadalang as lal # Langkit generated lib for Ada
@@ -324,12 +324,11 @@ def test(a, b):
 - Planned in the future:
     * Java (certainly) for interaction with IDEs
     * Lua (maybe)
-    * ... Whatever you need !
+    * ... Whatever you need!
 
 ## Tree walking
 
 Source code:
-
 ```python
 a = 12
 b = 15
@@ -340,10 +339,10 @@ print a + b
 Processing:
 ```python
 >>> for assign in unit.root.findall(lpl.AssignStmt):
->>>    print "Stmt: ", assign.text, assign.sloc 
+>>>    print 'Stmt:', assign.text, assign.sloc_range
 
-Stmt:  a = 12 2:1-2:7
-Stmt:  b = 15 3:1-3:7
+Stmt: a = 12 2:1-2:7
+Stmt: b = 15 3:1-3:7
 ```
 
 ## Rewriting
@@ -385,7 +384,7 @@ end Main;
 
 ### ./parse
 
-- Allows you to inspect the structure of the tree
+- Allow inspection of the AST
 - Dump lexical environments
 
 ## Unparser (along with tree rewriting)
@@ -401,7 +400,7 @@ end Main;
 
 ```python
 block_rule = field_rules(constant_increment=3)
-paren_rule = field_rules(on_token="(")
+paren_rule = field_rules(on_token='(')
 
 indent_map = {
     lal.PackageDecl: Indent(
@@ -409,7 +408,7 @@ indent_map = {
             public_part=block_rule, private_part=block_rule
         )
     ),
-    ...
+    # ...
     lal.Params: Indent(
         field_rules=indent_fields(params=paren_rule)
     ),
@@ -427,12 +426,12 @@ indent_map = {
 
 ## Language server protocol? (not done)
 
-- Tentative plan: Automatically generate basic LSP support from the plug-in
+- Tentative plan: automatically generate basic LSP support from the plug-in
 - We have a Neovim plug-in already doing for Ada:
     - Indentation
     - Go to definition
     - Tree editing and exploration
-- In the future: More editors, more languages ?
+- In the future: more editors, more languages?
 
 ## A multi-language static analyzer in 20 lines of Python
 
@@ -448,7 +447,7 @@ def has_same_operands(binop):
     return same_tokens(list(binop.f_left.tokens), list(binop.f_right.tokens))
 
 def interesting_oper(op):
-    return not op.is_a)
+    return not op.is_a) # TODO: fix this code
 
 for b in unit.root.findall(lal.BinOp):
     if interesting_oper(b.f_op) and has_same_operands(b):
@@ -462,3 +461,12 @@ for b in unit.root.findall(lal.BinOp):
 - JSON
 - GPR files (AdaCore's project description language)
 - KConfig
+
+## Conclusion
+
+- Sources are on GitHub: [https://github.com/AdaCore/langkit](https://github.com/AdaCore/langkit)
+- Tutorial, too: [https://github.com/AdaCore/langkit/blob/master/doc/tutorial.rst](https://github.com/AdaCore/langkit/blob/master/doc/tutorial.rst)
+- Still work in progress: APIs are moving and "doc is the code" (no separate
+  documentation document)
+- We gladly accept issues and pull requests, but our priority right now is
+  Libadalang
