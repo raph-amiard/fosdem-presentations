@@ -13,11 +13,11 @@ theme: metropolis
 
 ### In three bullet points
 
-- A library that allows user to query data about Ada programs/libraries.
+- A library that allows users to query data about Ada sources
 - Syntactic and semantic information
 - Both low level and high level information
 - Should be easy to integrate into tools/IDEs from different
-  platforms/languages/ect.
+  platforms/languages/etc.
 
 ## The need - IDEs
 
@@ -52,9 +52,9 @@ main.adb:3:4: Type name should start with uppercase letter
 
 ### Challenges
 
-- Incremental: Don't recompute everything when the code changes
-- Error recovery: Ability to compute partial results on incorrect code
-- Long running: Be able to run for 3 days without crashing your machine
+- Incremental: don't recompute everything when the code changes
+- Error recovery: ability to compute partial results on incorrect code
+- Long running: be able to run for 3 days without crashing your machine
 
 GNAT and AdaCore's ASIS implementation are ill suited to those challenges.
 
@@ -66,7 +66,7 @@ GNAT and AdaCore's ASIS implementation are ill suited to those challenges.
 - Easy scripting: Be able to create a prototype quickly & interactively
 
 - Both low & high level APIS:
-    * What type is this expression?
+    * What is the type of this expression?
     * How many references to this variable?
     * Give me the source location of this token
     * Rename this entity
@@ -168,10 +168,11 @@ TODO: fill when Romain sends
 
 ## Copy paste detector
 
-## Current applications
+## Applications
 
-- Inside Adacore: new versions of GNATmetric, GNATStub, GNATpp
-- Outside: Clients using it in production for various needs such as:
+- Inside Adacore: change semantic engine in GPS, new versions of GNATmetric,
+  GNATStub, GNATpp
+- Outside: clients using it in production for various needs such as:
     * Code instrumentation
     * Automatic refactorings
     * Generation of serializers/deserializers
@@ -180,3 +181,4 @@ TODO: fill when Romain sends
 
 - Sources are on [GitHub](https://github.com/AdaCore/libadalang)
 - Come open issues and create pull requests!
+- API is still a moving target
