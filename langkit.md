@@ -195,12 +195,7 @@ class Function(FooNode):
 class Call(FooNode):
     name = Field()
     arguments = Field()
-
     called_var = UserField(type=T.LogicVarType, public=False)
-
-    @langkit_property(public=True)
-    def resolve():
-        return Entity.equation.solve
 
     @langkit_property()
     def equation():
@@ -216,10 +211,23 @@ class Call(FooNode):
                 & Predicate(T.Function.args_match,
                             Entity.called_var,
                             Self.arguments))
+```
+
+## DSL Episode 5.4: Logic DSL example (4/n)
+
+```python
+class Call(FooNode):
+
+    # ...
 
     @langkit_property(public=True)
     def called_function():
         return Entity.called_var.get_value.cast(T.Function)
+
+    @langkit_property(public=True)
+    def resolve():
+        return Entity.equation.solve
+
 ```
 
 ## DSL Episode 5.5: Why?

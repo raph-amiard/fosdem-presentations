@@ -25,11 +25,11 @@ theme: metropolis
 
 ## The need - IDEs
 
-![Refactoring](fosdem-refactoring.png){ width=90% }
+![Cross references](fosdem-xrefs.png){ width=90% }
 
 ## The need - IDEs
 
-![Cross references](fosdem-xrefs.png){ width=90% }
+![Refactoring](fosdem-refactoring.png){ width=90% }
 
 ## The need - command line tools
 
@@ -74,19 +74,49 @@ GNAT and AdaCore's ASIS implementation are ill suited to those challenges.
 
 ## API Part 1: Tokens
 
+```ada
+--  main.adb
+procedure Main is null;
+```
+
 ```python
 ctx = lal.AnalysisContext()
 unit = ctx.get_from_file('main.adb')
 for token in unit.root.tokens:
-    print('Token: {}'.format(token))
+    print 'Token: {}'.format(token)
+```
+
+Outputs
+
+```
+Token: <Token Procedure u'procedure' at 1:1-1:10>
+Token: <Token Identifier u'Main' at 1:11-1:15>
+Token: <Token Is u'is' at 1:16-1:18>
+Token: <Token Null u'null' at 1:19-1:23>
+Token: <Token Semicolon u';' at 1:23-1:24>
 ```
 
 ## API Part 2: Syntax
 
+```ada
+procedure Main is
+   A : Integer := 12;
+   B, C : Integer := 15;
+begin
+   A := B + C;
+end Main;
+```
+
 ```python
 for object_decl in unit.root.findall(lal.ObjectDecl):
-    print(object_decl.text)
+    print object_decl.sloc_range, object_decl.text
+```
 
+Outputs
+
+```
+2:4-2:22 A : Integer := 12;
+3:4-3:25 B, C : Integer := 15;
 ```
 
 ## API Part 3: Semantic
@@ -107,24 +137,40 @@ double_call = unit.root.find(
     lambda n: n.is_a(lal.CallExpr) and n.f_name.text == 'Double'
 )
 
-print(double_call.f_name.p_referenced_decl)
-
+print double_call.f_name.p_referenced_decl.text
 ```
 
-## API Part 4: Tree rewriting
+Outputs
 
-> WARNING: Not done yet
+```
+function Double (I : Integer) return Integer is (I * 2);
+```
 
+## API Part 4: Tree rewriting (Not finished yet!)
+
+```ada
+procedure Main is
+begin
+    Put_Line ("Hello world");
+end Main;
+```
+
+Let's rewrite:
 ```python
-diff = ctx.start_rewriting()
-
-# Get the first parameter of the call to Double
-param_diff = diff.get_node(double_call.f_suffix[0])
-
+call = unit.root.findall(lal.CallExpr) # Find the call
+diff = ctx.start_rewriting() # Start a rewriting
+param_diff = diff.get_node(call.f_suffix[0]) # Get the param of the call
 # Replace the expression of the parameter with a new node
-param_diff.f_expr = lal.rewriting.RealLiteral('12.0')
-
+param_diff.f_expr = lal.rewriting.StringLiteral('"Bye world"')
 diff.apply()
+```
+
+Outputs:
+```ada
+procedure Main is
+begin
+    Put_Line ("Bye world");
+end Main;
 ```
 
 ## An example
@@ -134,16 +180,16 @@ import sys
 import libadalang as lal
 
 def check_ident(ident):
-    if ident.text[0] != ident.text[0].upper():
-        print('{}:{}: variable name "{}" should be capitalized'.format(
+    if ident.text[0].isupper():
+        print '{}:{}: variable name "{}" should be capitalized'.format(
             ident.unit.filename, ident.sloc_range.start, ident.text
-        ))
+        )
 
 ctx = lal.AnalysisContext()
 for filename in sys.argv[1:]:
     u = ctx.get_from_file(filename)
     for d in u.diagnostics:
-        print('{}:{}'.format(filename, d))
+        print '{}:{}'.format(filename, d)
     if u.root:
         for decl in u.root.findall(lal.ObjectDecl):
             for ident in decl.f_ids:
@@ -197,6 +243,6 @@ TODO: fill when Romain sends
 
 ## Conclusion
 
-- Sources are on [GitHub](https://github.com/AdaCore/libadalang)
+- Sources are on GitHub: [https://github.com/AdaCore/libadalang](https://github.com/AdaCore/libadalang)
 - Come open issues and create pull requests!
 - API is still a moving target
