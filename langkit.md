@@ -137,11 +137,11 @@ class VariableDeclaration(RootNode):
         T.env_assoc, key=Self.name.symbol, val=Self)))
 ```
 
-## DSL Episode 5: Semantic analysis
+## DSL Episode 5.1: Semantic analysis
 
 * Sub-DSL inside AST node declarations
-* Create kind of methods on AST nodes
-* Public methods: user API for semantic analysis
+* Create methods on AST nodes (called "properties")
+* Public properties: user API for semantic analysis
 * Private ones: implementation detail, hidden from users
 * Functional programming language
 
@@ -156,9 +156,95 @@ class VariableReference(FooNode):
         return Self.node_env.get_first(Self.name)
 ```
 
-## DSL Episode 5.5: Logic DSL
+## DSL Episode 5.2: Logic DSL
 
-TODO
+* Sub-DSL inside the properties DSL
+* Several expressions to create logic equations
+* Equation solutions give semantic analysis' output
+
+## DSL Episode 5.3: Logic DSL example (1/n)
+
+```python
+def f(a)
+def f(a, b)
+
+f(1)
+f(2, 3)
+f(2, 3, 4)
+```
+
+## DSL Episode 5.3: Logic DSL example (2/n)
+
+```python
+class Function(FooNode):
+    name = Field()
+    arguments = Field()
+
+    env_spec = EnvSpec(add_to_env(
+        mappings=New(T.env_assoc, key=Self.name.symbol, val=Self)
+    ))
+
+    @langkit_property()
+    def args_match(call_args=T.IntegerLiteral.list):
+        return call_args.length == Self.arguments.length
+```
+
+## DSL Episode 5.4: Logic DSL example (3/n)
+
+```python
+class Call(FooNode):
+    name = Field()
+    arguments = Field()
+
+    called_var = UserField(type=T.LogicVarType, public=False)
+
+    @langkit_property(public=True)
+    def resolve():
+        return Entity.equation.solve
+
+    @langkit_property()
+    def equation():
+        candidates = Var(Entity.node_env.get(Self.name).filtermap(
+            lambda c: c.el.cast(Function),
+            lambda c: c.is_a(Function)
+        ))
+        return candidates.logic_any(lambda f: Entity.sub_equation(f))
+
+    @langkit_property()
+    def sub_equation(func=Function):
+        return (Bind(Entity.called_var, func)
+                & Predicate(T.Function.args_match,
+                            Entity.called_var,
+                            Self.arguments))
+
+    @langkit_property(public=True)
+    def called_function():
+        return Entity.called_var.get_value.cast(T.Function)
+```
+
+## DSL Episode 5.5: Why?
+
+* Previous example would be simpler without equations
+* Just filter the list of candidates and return the first one, right?
+* Main use case: overload resolution
+
+```ada
+type Integer;
+type Character;
+type Float;
+
+function F1 (I : Integer) return Integer;
+function F1 (F : Float) return Integer;
+
+function F2 (C : Character) return Integer;
+function F2 (C : Character) return Character;
+
+F1 (1);
+F1 ('C');
+F2 (2);
+
+F1 (F2 (F2 ('C')));
+```
 
 ## Crafted for incremental analysis
 
