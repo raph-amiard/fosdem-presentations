@@ -106,28 +106,27 @@ g.add_rules(
 ## DSL Episode 4: Scoping
 
 ```python
-from langkit.dsl import T
-from langkit.envs import EnvSpec, add_env, add_to_env
-from langkit.expressions import New, Self
-
 class Function(RootNode):
     local_vars = Field()
-    env_spec = EnvSpec(add_env())
+    env_spec = EnvSpec(
+        add_env() # Associate an env to this node
+    )
 
 class VariableDeclaration(RootNode):
     name = Field()
     env_spec = EnvSpec(
         add_to_env(
             mappings=New(T.env_assoc, key=Self.name.symbol, val=Self)
+            # In the current env, add a mapping from the name of this var to
+            # the node itself.
         )
     )
 ```
 
-* Sub-DSL inside the node declarations
 * Foundation for semantic analysis
 * Create name/nodes mappings: lexical environments
 
-## DSL Episode 5.1: Semantic analysis
+## DSL Episode 5: Semantic analysis
 
 ```python
 from langkit.expressions import langkit_property
@@ -140,102 +139,24 @@ class VariableReference(FooNode):
         return Self.node_env.get_first(Self.name)
 ```
 
-* Sub-DSL inside node declarations
 * Create methods on nodes (called "properties")
 * Public properties: user API for semantic analysis
 * Private ones: implementation detail, hidden from users
 * Functional programming language
 
-## DSL Episode 5.2: Logic DSL
+## DSL Episode 6: Logic DSL
 
-* Sub-DSL inside the properties DSL
-* Several expressions to create logic equations
-* Equation solutions give semantic analysis' output
-
-## DSL Episode 5.3: Logic DSL example (1/n)
-
-```python
-def f(a)
-def f(a, b)
-
-f(1)
-f(2, 3)
-f(2, 3, 4)
-```
-
-## DSL Episode 5.3: Logic DSL example (2/n)
-
-```python
-class Function(FooNode):
-    name = Field()
-    arguments = Field()
-
-    env_spec = EnvSpec(add_to_env(
-        mappings=New(T.env_assoc, key=Self.name.symbol, val=Self)
-    ))
-
-    @langkit_property()
-    def args_match(call_args=T.IntegerLiteral.list):
-        return call_args.length == Self.arguments.length
-```
-
-## DSL Episode 5.4: Logic DSL example (3/n)
-
-```python
-class Call(FooNode):
-    name = Field()
-    arguments = Field()
-    called_var = UserField(type=T.LogicVarType, public=False)
-
-    @langkit_property()
-    def equation():
-        candidates = Var(Entity.node_env.get(Self.name).filtermap(
-            lambda c: c.el.cast(Function),
-            lambda c: c.is_a(Function)
-        ))
-        return candidates.logic_any(lambda f: Entity.sub_equation(f))
-
-    @langkit_property()
-    def sub_equation(func=Function):
-        return (Bind(Entity.called_var, func)
-                & Predicate(T.Function.args_match,
-                            Entity.called_var,
-                            Self.arguments))
-```
-
-## DSL Episode 5.4: Logic DSL example (4/n)
-
-```python
-class Call(FooNode):
-
-    # ...
-
-    @langkit_property(public=True)
-    def called_function():
-        return Entity.called_var.get_value.cast(T.Function)
-
-    @langkit_property(public=True)
-    def resolve():
-        return Entity.equation.solve
-
-```
-
-## DSL Episode 5.5: Why?
-
-* Previous example would be simpler without equations
-* Just filter the list of candidates and return the first one, right?
-* Main use case: overload resolution
+- Hard problems in semantic analysis:
+    * Overload resolution
+    * Type inference
+- Require non local knowledge
 
 ```ada
-type Integer;
-type Character;
-type Float;
+def F1 (I : int) -> int;
+def F1 (F : float) -> int;
 
-function F1 (I : Integer) return Integer;
-function F1 (F : Float) return Integer;
-
-function F2 (C : Character) return Integer;
-function F2 (C : Character) return Character;
+def F2 (C : char) -> int;
+def F2 (C : char) -> char;
 
 F1 (1);
 F1 ('C');
@@ -244,13 +165,30 @@ F2 (2);
 F1 (F2 (F2 ('C')));
 ```
 
-## Crafted for incremental analysis
+## DSL Episode 6: Logic DSL
 
-* Reloading happens a lot in IDE: performance required
-* Avoid big recomputations for common operations
-* No need to recompute *everything* when reloading one source file:
-    * Keep source file-specific data as much isolated as possible
-    * Reduced update process when removing/reloading source files
+```ada
+   F1 (F2 (F2 ('C')));
+--         ^ Call A
+--     ^ Call B
+-- ^ Call C
+```
+
+```text
+A.args[0].type = char
+A.returns.type = B.args[0].type
+B.returns.type = C.args[0].type
+A is in [F2 (C : char) -> int,
+         F2 (C : char) -> char]
+B is in [F2 (C : char) -> int,
+         F2 (C : char) -> char]
+C is in [F1 (I : int) -> int,
+         F1 (F : float) -> float]
+```
+
+## DSL Episode 6: Logic DSL
+
+### TODO
 
 # The generated libraries
 
@@ -282,39 +220,18 @@ So that it is very easy to generate bindings to any languages the users wants
 - Python is the de-facto scripting language of the Langkit ecosystem
 - Everything possible in Ada is possible in Python
 
-## Use multiple generated libraries from Python!
-
-```python
-import libadalang as lal # Langkit generated lib for Ada
-import libpythonlang as lpl # Langkit generated lib for Python
-
-ada_ctx = lal.AnalysisContext()
-python_ctx = lpl.AnalysisContext()
-
-print ada_ctx.get_from_buffer("main.adb", """
-procedure Main is
-begin
-   null;
-end Main;
-"""
-) # <CompilationUnit 2:1-5:10>
-print python_ctx.get_from_buffer("test.py", """
-def test(a, b):
-    return a + b
-"""
-) # <FileNode 1:1-4:1>
-
-```
-
-## Easy to generate bindings to new languages
+### Easy to generate bindings to new languages
 
 - No need for external bindings generators
 - Knowledge about data types, functions, memory management -> Langkit
 
-- Planned in the future:
-    * Java (certainly) for interaction with IDEs
-    * Lua (maybe)
-    * ... Whatever you need!
+## Crafted for incremental analysis
+
+* Reloading happens a lot in IDE: performance required
+* Avoid big recomputations for common operations
+* No need to recompute *everything* when reloading one source file:
+    * Keep source file-specific data as much isolated as possible
+    * Reduced update process when removing/reloading source files
 
 ## Tree walking
 
@@ -325,7 +242,6 @@ b = 15
 print a + b
 ```
 
-
 Processing:
 ```python
 >>> for assign in unit.root.findall(lpl.AssignStmt):
@@ -335,7 +251,14 @@ Stmt: a = 12 2:1-2:7
 Stmt: b = 15 3:1-3:7
 ```
 
-## Rewriting
+## Unparser
+
+- Create a new source file *only from the tree* (not using original source
+  information)
+- Can also be used to create sources from completely synthetic trees
+- Uses the grammar and the AST definition (no additional code needed)
+
+## Rewriting (Work in progress)
 
 Source code:
 ```ada
@@ -377,20 +300,12 @@ end Main;
 - Allow inspection of the AST
 - Dump lexical environments
 
-## Unparser (along with tree rewriting)
-
-- Create a new source file *only from the tree* (not using original source
-  information)
-- Can also be used to create sources from completely synthetic trees
-- Uses the grammar and the AST definition (no additional code needed)
-
 ## Code indenter (prototype)
 
 - Provide a declarative data structure for indentation rules
 
 ```python
 block_rule = field_rules(constant_increment=3)
-paren_rule = field_rules(on_token='(')
 
 indent_map = {
     lal.PackageDecl: Indent(
@@ -399,9 +314,6 @@ indent_map = {
         )
     ),
     # ...
-    lal.Params: Indent(
-        field_rules=indent_fields(params=paren_rule)
-    ),
 }
 ```
 
@@ -422,27 +334,6 @@ indent_map = {
     - Go to definition
     - Tree editing and exploration
 - In the future: more editors, more languages?
-
-## A multi-language static analyzer in 20 lines of Python
-
-```python
-ada_ops = (lal.OpMult, lal.OpPlus, lal.OpDoubleDot, lal.OpPow, lal.OpConcat)
-py_ops = (pyl.OpMult, pyl.OpPlus, pyl.OpDoubleDot, pyl.OpPow, pyl.OpConcat)
-
-def has_same_operands(binop):
-    def same_tokens(left, right):
-        return len(left) == len(right) and all(
-            le.is_equivalent(ri) for le, ri in zip(left, right)
-        )
-    return same_tokens(list(binop.f_left.tokens), list(binop.f_right.tokens))
-
-def interesting_oper(op):
-    return not op.is_a) # TODO: fix this code
-
-for b in unit.root.findall(lal.BinOp):
-    if interesting_oper(b.f_op) and has_same_operands(b):
-        print 'Same operands for {} in {}'.format(b, source_file)
-```
 
 ## Existing langkit-based libraries & prototypes
 
