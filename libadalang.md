@@ -245,7 +245,7 @@ end Main;
 
 - Very simple and targeted abstract interpretation
 - DSL to specify new checkers
-- Work in progress! More info soon
+- Work in progress! Repository here [https://github.com/AdaCore/lal-checkers](https://github.com/AdaCore/lal-checkers)
 
 ## Copy paste detector
 
