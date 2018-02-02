@@ -338,13 +338,17 @@ indent_map = {
     - Tree editing and exploration
 - In the future: more editors, more languages?
 
-## Existing langkit-based libraries & prototypes
+## Existing Langkit-based libraries & prototypes
 
 - Ada
+  [https://github.com/AdaCore/libadalang](https://github.com/AdaCore/libadalang)
 - Python
+  [https://github.com/AdaCore/langkit/tree/master/contrib/python](https://github.com/AdaCore/langkit/tree/master/contrib/python)
 - JSON
 - GPR files (AdaCore's project description language)
-- KConfig
+  [https://github.com/AdaCore/gpr](https://github.com/AdaCore/gpr)
+- KConfig (Linux kernel configuration description language)
+  [https://github.com/Fabien-Chouteau/libkconfiglang](https://github.com/Fabien-Chouteau/libkconfiglang)
 
 ## Conclusion
 
