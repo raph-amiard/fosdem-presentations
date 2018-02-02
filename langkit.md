@@ -261,7 +261,7 @@ Stmt: b = 15 3:1-3:7
 - Can also be used to create sources from completely synthetic trees
 - Uses the grammar and the AST definition (no additional code needed)
 
-## Rewriting (Work in progress)
+## Rewriting (work in progress)
 
 Source code:
 ```ada

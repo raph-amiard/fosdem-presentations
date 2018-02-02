@@ -44,8 +44,7 @@ end Main;
 
 ```bash
 $ ./my_custom_lal_checker main.adb
-
-main.adb:2:9: Variable should start with lowercase letter
+main.adb:2:9: Variable name should start with lowercase letter
 main.adb:3:4: Type name should start with uppercase letter
 ```
 ## Why not ASIS/GNAT?
@@ -86,8 +85,7 @@ for token in unit.root.tokens:
     print 'Token: {}'.format(token)
 ```
 
-Outputs
-
+Outputs:
 ```
 Token: <Token Procedure u'procedure' at 1:1-1:10>
 Token: <Token Identifier u'Main' at 1:11-1:15>
@@ -112,8 +110,7 @@ for object_decl in unit.root.findall(lal.ObjectDecl):
     print object_decl.sloc_range, object_decl.text
 ```
 
-Outputs
-
+Outputs:
 ```
 2:4-2:22 A : Integer := 12;
 3:4-3:25 B, C : Integer := 15;
@@ -140,13 +137,12 @@ double_call = unit.root.find(
 print double_call.f_name.p_referenced_decl.text
 ```
 
-Outputs
-
+Outputs:
 ```
 function Double (I : Integer) return Integer is (I * 2);
 ```
 
-## API Part 4: Tree rewriting (Not finished yet!)
+## API Part 4: Tree rewriting (not finished yet!)
 
 ```ada
 procedure Main is
