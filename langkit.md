@@ -330,7 +330,7 @@ indent_map = {
 - Custom rules to highlight more complex syntax based rules
 - Automatic support in your editor
 
-## Language server protocol? (not done)
+## Language Server Protocol? (not done)
 
 - Tentative plan: automatically generate basic LSP support from the plug-in
 - We have a Neovim plug-in already doing for Ada:
@@ -341,14 +341,14 @@ indent_map = {
 
 ## Existing Langkit-based libraries & prototypes
 
-- Ada
+- **Ada**
   [https://github.com/AdaCore/libadalang](https://github.com/AdaCore/libadalang)
-- Python
+- **Python**
   [https://github.com/AdaCore/langkit/tree/master/contrib/python](https://github.com/AdaCore/langkit/tree/master/contrib/python)
-- JSON
-- GPR files (AdaCore's project description language)
+- **JSON**
+- **GPR** files (AdaCore's project description language)
   [https://github.com/AdaCore/gpr](https://github.com/AdaCore/gpr)
-- KConfig (Linux kernel configuration description language)
+- **KConfig** (Linux kernel configuration description language)
   [https://github.com/Fabien-Chouteau/libkconfiglang](https://github.com/Fabien-Chouteau/libkconfiglang)
 
 ## Conclusion
