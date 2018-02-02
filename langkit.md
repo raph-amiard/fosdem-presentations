@@ -249,8 +249,8 @@ F1 (F2 (F2 ('C')));
 * Reloading happens a lot in IDE: performance required
 * Avoid big recomputations for common operations
 * No need to recompute *everything* when reloading one source file:
-  * Keep source file-specific data as much isolated as possible
-  * Reduced update process when removing/reloading source files
+    * Keep source file-specific data as much isolated as possible
+    * Reduced update process when removing/reloading source files
 
 # The generated libraries
 
