@@ -224,7 +224,24 @@ More info [on our blog](http://blog.adacore.com/going-after-the-low-hanging-bug)
 
 ## Semantic based static analyzers
 
-TODO: fill when Romain sends
+```ada
+with Ada.Text_IO; use Ada.Text_IO;
+ 
+procedure Main is
+   Input : File_Type;
+begin
+   Open (File => Input, Mode => In_File, Name => "input.txt");
+
+   while not End_Of_File (Input) loop
+      declare
+         Line : String := Get_Line (Input);  <--- WARNING: File might be closed
+      begin
+         Put_Line (Line);
+         Close (Input);    <--- WARNING: File might be closed
+      end;
+   end loop;
+end Main;
+```
 
 ## Copy paste detector
 
