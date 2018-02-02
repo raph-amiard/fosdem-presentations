@@ -220,7 +220,7 @@ So that it is very easy to generate bindings to any languages the users wants
 
 ### First class citizen Python bindings
 
-- Python is the de-facto scripting language of the Langkit ecosystem
+- Python is the *de facto* scripting language of the Langkit ecosystem
 - Everything possible in Ada is possible in Python
 
 ### Easy to generate bindings to new languages
