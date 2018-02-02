@@ -151,44 +151,47 @@ class VariableReference(FooNode):
     * Type inference
 - Require non local knowledge
 
-```ada
-def F1 (I : int) -> int;
-def F1 (F : float) -> int;
+```python
+def f1 (i : int) -> int;
+def f1 (f : float) -> int;
 
-def F2 (C : char) -> int;
-def F2 (C : char) -> char;
+def f2 (c : char) -> int;
+def f2 (c : char) -> char;
 
-F1 (1);
-F1 ('C');
-F2 (2);
+f1 (1);
+f1 (0.3);
+f2 (2);
 
-F1 (F2 (F2 ('C')));
+f1 (f2 (f2 ('C')));
 ```
 
 ## DSL Episode 6: Logic DSL
 
-```ada
-   F1 (F2 (F2 ('C')));
---         ^ Call A
---     ^ Call B
--- ^ Call C
+```python
+  f1 (f2 (f2 ('C')));
+#         ^ Call A
+#     ^ Call B
+# ^ Call C
 ```
 
 ```text
 A.args[0].type = char
 A.returns.type = B.args[0].type
 B.returns.type = C.args[0].type
-A is in [F2 (C : char) -> int,
-         F2 (C : char) -> char]
-B is in [F2 (C : char) -> int,
-         F2 (C : char) -> char]
-C is in [F1 (I : int) -> int,
-         F1 (F : float) -> float]
+A is in [f2 (c : char) -> int,
+         f2 (c : char) -> char]
+B is in [f2 (c : char) -> int,
+         f2 (c : char) -> char]
+C is in [f1 (i : int) -> int,
+         f1 (f : float) -> float]
 ```
 
-## DSL Episode 6: Logic DSL
-
-### TODO
+Solution:
+```python
+A = f1 (i : int) -> int
+B = f2 (c : char) -> int
+C = f2 (c : char) -> char
+```
 
 # The generated libraries
 
