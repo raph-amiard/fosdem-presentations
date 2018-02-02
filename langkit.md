@@ -291,14 +291,14 @@ import libpythonlang as lpl # Langkit generated lib for Python
 ada_ctx = lal.AnalysisContext()
 python_ctx = lpl.AnalysisContext()
 
-print ada_ctx.get_from_buffer("<buffer>", """
+print ada_ctx.get_from_buffer("main.adb", """
 procedure Main is
 begin
    null;
 end Main;
 """
 ) # <CompilationUnit 2:1-5:10>
-print python_ctx.get_from_buffer("<buffer>", """
+print python_ctx.get_from_buffer("test.py", """
 def test(a, b):
     return a + b
 """
