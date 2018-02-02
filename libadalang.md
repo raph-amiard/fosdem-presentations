@@ -243,7 +243,15 @@ begin
 end Main;
 ```
 
+- Very simple and targeted abstract interpretation
+- DSL to specify new checkers
+- Work in progress! More info soon
+
 ## Copy paste detector
+
+- Done with Python API too
+- Very lightweight (few hundreds lines of code)
+- Full article here: [https://blog.adacore.com/a-usable-copy-paste-detector-in-few-lines-of-python](https://blog.adacore.com/a-usable-copy-paste-detector-in-few-lines-of-python)
 
 ## Applications
 

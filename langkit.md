@@ -238,6 +238,9 @@ So that it is very easy to generate bindings to any languages the users wants
 
 ## Syntactic analysis
 
+- Small Ada syntactic analyzer
+- Can be adapted to another language trivially
+
 ```python
 def has_same_operands(binop):
     def same_tokens(left, right):
@@ -254,6 +257,8 @@ for b in unit.root.findall(lal.BinOp):
     if interesting_oper(b.f_op) and has_same_operands(b):
         print 'Same operands for {} in {}'.format(b, source_file)
 ```
+
+- Detected 4 serious bugs in AdaCore's own code
 
 ## Unparser
 
