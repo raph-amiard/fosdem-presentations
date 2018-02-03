@@ -13,11 +13,16 @@ theme: metropolis
 
 ### In three bullet points
 
-- A library that allows users to query data about Ada sources
-- Syntactic and semantic information
-- Both low level and high level information
-- Should be easy to integrate into tools/IDEs from different
-  platforms/languages/etc.
+- A library that allows users to query/alter data about Ada sources
+- Both low & high level APIS:
+    * What is the type of this expression?
+    * How many references to this variable?
+    * Give me the source location of this token
+    * Rename this entity
+    * Etc.
+- Multi-language: Easy binding generation to other languages/ecosystems
+    * Today: Python, Ada, C
+- Easy scripting: Be able to create a prototype quickly & interactively
 
 ## The need - IDEs
 
@@ -56,20 +61,6 @@ main.adb:3:4: Type name should start with uppercase letter
 - Long running: be able to run for 3 days without crashing your machine
 
 GNAT and AdaCore's ASIS implementation are ill suited to those challenges.
-
-## Design goals
-
-- Multi-language: Easy binding generation to other languages/ecosystems
-    * Today: Python, Ada, C
-
-- Easy scripting: Be able to create a prototype quickly & interactively
-
-- Both low & high level APIS:
-    * What is the type of this expression?
-    * How many references to this variable?
-    * Give me the source location of this token
-    * Rename this entity
-    * Etc.
 
 ## API Part 1: Tokens
 
