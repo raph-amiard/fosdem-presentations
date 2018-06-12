@@ -49,8 +49,8 @@ end Main;
 
 ```bash
 $ ./my_custom_lal_checker main.adb
-main.adb:2:9: Variable name should start with lowercase letter
-main.adb:3:4: Type name should start with uppercase letter
+main.adb:2:9: type name should start with uppercase letter
+main.adb:3:3: variable name should start with lowercase letter
 ```
 ## Why not ASIS/GNAT?
 
