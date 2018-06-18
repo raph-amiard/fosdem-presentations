@@ -54,13 +54,18 @@ main.adb:3:3: variable name should start with lowercase letter
 ```
 ## Why not ASIS/GNAT?
 
-### Challenges
+### Challenges for ASIS's GNAT implementation
 
 - Incremental: don't recompute everything when the code changes
 - Error recovery: ability to compute partial results on incorrect code
 - Long running: be able to run for 3 days without crashing your machine
 
-GNAT and AdaCore's ASIS implementation are ill suited to those challenges.
+GNAT based ASIS implementation is ill suited to those challenges.
+
+### API problems
+
+- ASIS API is too low level/too difficult to change
+- Desire for a more modern, higher level API
 
 ## API Part 1: Tokens
 
