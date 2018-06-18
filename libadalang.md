@@ -67,6 +67,19 @@ GNAT based ASIS implementation is ill suited to those challenges.
 - ASIS API is too low level/too difficult to change
 - Desire for a more modern, higher level API
 
+## Why not blank slate implementation of ASIS ?
+
+- ASIS specifies a complicated API
+- A lot of work to create a new implementation
+- And then, it is still not what we want! We still need to:
+    - Change most parts of the API.
+    - Add a lot of operations (refactoring API, higher level semantic queries,
+      etc..)
+    - Specify how error recovery works with ASIS
+    - ...
+
+So better to start from scratch :)
+
 ## API Part 1: Tokens
 
 ```ada
