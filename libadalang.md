@@ -67,7 +67,7 @@ GNAT based ASIS implementation is ill suited to those challenges.
 - ASIS API is too low level/too difficult to change
 - Desire for a more modern, higher level API
 
-## Why not blank slate implementation of ASIS ?
+## Why not blank slate implementation of ASIS?
 
 - ASIS specifies a complicated API
 - A lot of work to create a new implementation
