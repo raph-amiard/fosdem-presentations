@@ -151,7 +151,7 @@ Outputs:
 function Double (I : Integer) return Integer is (I * 2);
 ```
 
-## API Part 4: Tree rewriting (not finished yet!)
+## API Part 4: Tree rewriting
 
 ```ada
 procedure Main is
@@ -185,7 +185,7 @@ import sys
 import libadalang as lal
 
 def check_ident(ident):
-    if ident.text[0].isupper():
+    if not ident.text[0].isupper():
         print '{}:{}: variable name "{}" should be capitalized'.format(
             ident.unit.filename, ident.sloc_range.start, ident.text
         )
@@ -235,7 +235,7 @@ More info [on our blog](http://blog.adacore.com/going-after-the-low-hanging-bug)
 
 ```ada
 with Ada.Text_IO; use Ada.Text_IO;
- 
+
 procedure Main is
    Input : File_Type;
 begin
@@ -276,3 +276,7 @@ end Main;
 - Sources are on GitHub: [https://github.com/AdaCore/libadalang](https://github.com/AdaCore/libadalang)
 - Come open issues and create pull requests!
 - API is still a moving target
+- First stable version by October 2018
+- API will be incrementally improved after that
+   - We'll try to avoid breakage as much as possible
+   - But allow ourselves to make it better for the future :)

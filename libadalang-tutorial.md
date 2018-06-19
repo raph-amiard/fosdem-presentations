@@ -39,22 +39,22 @@ theme: metropolis
     * On Linux: URL
     * On Windows: URL
 
-## API Concepts
+# API Concepts
 
-### Analysis context
+## Analysis context
 
 * `Libadalang.Analysis.Analysis_Context` type
 * Holder for all computations in Libadalang
 * `Create` and `Destroy`
 * Owns analysis units
 
-### Analysis unit
+## Analysis unit
 
 * `Libadalang.Analysis.Analysis_Unit` type
 * Owns for tokens, parsing tree and semantic data for a source file
 * `Get_From_File`, `Get_From_Buffer`, `Get_From_Provider`
 
-### Nodes
+## Nodes
 
 * `Libadalang.Analysis.Ada_Node` type and derivations
 * Nodes for the parsing tree, plus generic instantiation context
@@ -65,7 +65,7 @@ theme: metropolis
     * token nodes have no child, only a label (e.g. identifiers, string
       literals)
 
-### Node fields
+## Node fields
 
 * `Libadalang.Analysis.F_*` functions
 * `F_` = field: let one go down the syntax tree
@@ -73,21 +73,21 @@ theme: metropolis
 * For instance: `F_Type_Expr` or `F_Has_Aliased` for object declarations
   (`Object_Decl` nodes)
 
-### Node properties
+## Node properties
 
 * `Libadalang.Analysis.P_*` functions
 * `P_` = property: dynamic evaluation for name resolution, implemented on top
   of syntax fields
 * For instance: `P_Referenced_Decl`, `P_Primitive_Subp_Of`, …
 
-### Rewriting: concept
+## Rewriting: concept
 
 * Once the analysis context is created, start a rewriting session
 * Do modifications (create new nodes, replace, remove) on a "virtual" tree
 * Original one is unmodified, so name resolution is still available
 * Once done, apply the rewriting: modifies analysis units in place
 
-### Rewriting: types
+## Rewriting: types
 
 * All in `Libadalang.Rewriting` package
 * `Rewriting_Handle` for the rewriting session
@@ -95,7 +95,7 @@ theme: metropolis
 * `Handle`/`Unit`/`Node` functions to go back and forth between virtual and
   original trees
 
-### Rewriting: operations
+## Rewriting: operations
 
 * `Root`/`Set_Root` to get/set analysis unit root node
 * `Child`/`Set_Child` to get/set node children
@@ -104,7 +104,7 @@ theme: metropolis
 * `Clone`/`Create_*` to create new nodes
 * `Create_From_Template` to create trees of new nodes from text
 
-### Rewriting help: introspection
+## Rewriting help: introspection
 
 * Get back and forth between field name and child index
     * For instance: `F_Suffix` is the second field of the `Call_Expr` node
