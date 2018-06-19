@@ -162,7 +162,7 @@ end Main;
 
 Let's rewrite:
 ```python
-call = unit.root.findall(lal.CallExpr) # Find the call
+call = unit.root.find(lal.CallExpr) # Find the call
 diff = ctx.start_rewriting() # Start a rewriting
 param_diff = diff.get_node(call.f_suffix[0]) # Get the param of the call
 # Replace the expression of the parameter with a new node
