@@ -32,13 +32,6 @@ theme: metropolis
 * Perform automatic refactorings
 * Focused on the Ada API
 
-### Requirements
-
-* GNAT Community 2018 (https://www.adacore.com/download/)
-* Build Libadalang yourself, or get and install:
-    * On Linux: URL
-    * On Windows: URL
-
 # API Concepts
 
 ## Analysis context
@@ -125,3 +118,12 @@ end Exercizes;
 ```sh
 gprbuild -Pexercizes.gpr -XLIBRARY_TYPE=relocatable -XXMLADA_BUILD=relocatable -p
 ```
+
+## Exercize
+
+For every primitive of a type T:
+
+- Flag the controlling parameters if they're not named ``Self`` (or ``This`` or
+  whatever)
+- Rewrite them to be named ``Self``
+- Rewrite every occurence in the body of the subprogram
