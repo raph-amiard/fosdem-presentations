@@ -127,3 +127,12 @@ For every primitive of a type T:
   whatever)
 - Rewrite them to be named ``Self``
 - Rewrite every occurence in the body of the subprogram
+
+## To go further...
+
+* Report bug and feature requests as GitHub issues:
+  https://github.com/AdaCore/libadalang
+* Exercize solution and more:
+  https://github.com/AdaCore/libadalang/tree/master/contrib/ AdaEurope2018
+* Useful material on AdaCore’s blog:
+  https://blog.adacore.com/tag/libadalang
